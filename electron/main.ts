@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import Store from 'electron-store';
 
 import { handlePlaySoopChat, handleStopSoopChat } from './soop';
@@ -37,6 +37,17 @@ const createWindow = () => {
     shell.openExternal(url);
     return { action: 'deny' };
   });
+
+  session.defaultSession.webRequest.onBeforeSendHeaders(
+    {
+      urls: ['https://www.youtube.com/*', 'https://www.youtube-nocookie.com/*'],
+    },
+    (details, callback) => {
+      details.requestHeaders.Referer =
+        'https://com.joyfui.soop-gamepinball-helper';
+      callback({ requestHeaders: details.requestHeaders });
+    },
+  );
 };
 
 app.setPath(
