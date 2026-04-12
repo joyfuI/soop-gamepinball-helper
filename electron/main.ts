@@ -87,6 +87,20 @@ app.on('activate', () => {
   }
 });
 
+app.on('browser-window-created', (_event, win) => {
+  // test. 개발자도구 undocked 모드로 열기
+  win.webContents.on('before-input-event', (event, input) => {
+    if (input.type === 'keyDown' && input.key === 'F12') {
+      event.preventDefault();
+      if (win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools();
+      } else {
+        win.webContents.openDevTools({ mode: 'undocked' });
+      }
+    }
+  });
+});
+
 app.whenReady().then(createWindow);
 
 ipcMain.on('getStore', (event, key, defaultValue) => {
