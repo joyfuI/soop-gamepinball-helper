@@ -1,3 +1,4 @@
+import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -15,6 +16,7 @@ const RerollTimerApp = () => {
   const [ss, setSS] = useState(() =>
     window.electron.getStore('pinball.timer.second'),
   );
+  const [isReroll, setIsReroll] = useState(false);
   const timer = useRef<NodeJS.Timeout>(null);
   const [rerollPrice] = useStore('pinball.rerollPrice');
 
@@ -28,21 +30,26 @@ const RerollTimerApp = () => {
     });
   }, []);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback(async () => {
     switch (step) {
-      case 0:
+      case 0: {
+        // 타이머 설정
+        const streamerId = await window.electron.getStoreAsync('setup.id');
+        window.electron.playSoopChat('reroll-timer', streamerId);
         timer.current = setInterval(interval, 1000);
         setStep(1);
         break;
+      }
 
-      case 1:
+      case 1: // 타이머 시작
+        window.electron.stopSoopChat('reroll-timer');
         if (timer.current) {
           clearInterval(timer.current);
         }
         setStep(2);
         break;
 
-      case 2:
+      case 2: // 타이머 정지
         setMM(window.electron.getStore('pinball.timer.minute'));
         setSS(window.electron.getStore('pinball.timer.second'));
         setStep(0);
@@ -55,6 +62,21 @@ const RerollTimerApp = () => {
       handleClick();
     }
   }, [step, mm, ss, handleClick]);
+
+  useEffect(
+    () =>
+      window.electron.onDonationResponse((key, response) => {
+        if (key !== 'reroll-timer') {
+          return;
+        }
+        console.log('donation', key, response);
+        if (step === 1 && parseInt(response.amount, 10) === rerollPrice) {
+          handleClick();
+          setIsReroll(true);
+        }
+      }),
+    [step, rerollPrice, handleClick],
+  );
 
   return (
     <Box
@@ -107,6 +129,16 @@ const RerollTimerApp = () => {
           {['시작', '정지', '초기화'][step]}
         </Button>
       </Stack>
+
+      <Backdrop
+        onClick={() => setIsReroll(false)}
+        open={isReroll}
+        sx={{ backgroundColor: 'rgba(0, 0, 0, 0.9)', cursor: 'pointer' }}
+      >
+        <Typography sx={{ color: '#fff' }} variant="h3">
+          리롤!!
+        </Typography>
+      </Backdrop>
     </Box>
   );
 };

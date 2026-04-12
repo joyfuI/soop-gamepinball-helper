@@ -106,6 +106,17 @@ ipcMain.handle('playSoopChat', handlePlaySoopChat);
 ipcMain.on('stopSoopChat', handleStopSoopChat);
 // test
 ipcMain.on('testDonation', (event, windowType, amount, comment) => {
+  if (windowType === 'reroll-timer') {
+    event.sender.send('donationResponse', 'reroll-timer', {
+      receivedTime: new Date().toISOString(),
+      to: 'joyfui',
+      from: 'joyfui',
+      fromUsername: 'joyfuI',
+      amount: amount.toString(),
+      fanClubOrdinal: '0',
+    });
+    return;
+  }
   event.sender.send('donationResponse', 'main', {
     receivedTime: new Date().toISOString(),
     to: 'joyfui',
