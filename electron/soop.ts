@@ -1,24 +1,26 @@
-import type { IpcMainInvokeEvent } from 'electron';
+import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
 import type { SoopChat } from 'soop-extension';
 import { SoopChatEvent, SoopClient } from 'soop-extension';
 
-let soopChat: SoopChat | null;
+const soopChatMap = new Map<string, SoopChat>();
 
 export const handlePlaySoopChat = async (
   event: IpcMainInvokeEvent,
+  key: string,
   streamerId: string,
 ) => {
-  console.log('call playSoopChat', streamerId);
+  console.log('call playSoopChat', key, streamerId);
   try {
     const client = new SoopClient();
-    soopChat = client.chat({ streamerId });
+    const soopChat = client.chat({ streamerId });
+    soopChatMap.set(key, soopChat);
 
     // 별풍선 데이터
     soopChat.on(SoopChatEvent.TEXT_DONATION, (response) => {
       console.log(
         `[${response.receivedTime}] ${response.fromUsername}(${response.from}) donated ${response.amount} to ${response.to}`,
       );
-      event.sender.send('donationResponse', response);
+      event.sender.send('donationResponse', key, response);
     });
 
     // 애드벌룬 데이터
@@ -26,7 +28,7 @@ export const handlePlaySoopChat = async (
       console.log(
         `[${response.receivedTime}] ${response.fromUsername}(${response.from}) donated ${response.amount} to ${response.to}`,
       );
-      event.sender.send('donationResponse', response);
+      event.sender.send('donationResponse', key, response);
     });
 
     // 채팅 데이터
@@ -34,7 +36,7 @@ export const handlePlaySoopChat = async (
       console.log(
         `[${response.receivedTime}] ${response.username}(${response.userId}): ${response.comment}`,
       );
-      event.sender.send('chatResponse', response);
+      event.sender.send('chatResponse', key, response);
     });
 
     // 연결 종료
@@ -43,7 +45,7 @@ export const handlePlaySoopChat = async (
       console.log(
         `[${response.receivedTime}] ${response.streamerId}'s stream has ended`,
       );
-      soopChat?.connect();
+      soopChatMap.get(key)?.connect();
     });
 
     // Connect to chat
@@ -51,14 +53,14 @@ export const handlePlaySoopChat = async (
     return true;
   } catch {
     console.log('error soopChat');
-    soopChat = null;
+    soopChatMap.delete(key);
     return false;
   }
 };
 
-export const handleStopSoopChat = () => {
-  console.log('call stopSoopChat');
-  const tmpSoopChat = soopChat;
-  soopChat = null;
-  tmpSoopChat?.disconnect();
+export const handleStopSoopChat = (_event: IpcMainEvent, key: string) => {
+  console.log('call stopSoopChat', key);
+  const soopChat = soopChatMap.get(key);
+  soopChatMap.delete(key);
+  soopChat?.disconnect();
 };

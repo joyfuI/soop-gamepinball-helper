@@ -28,28 +28,36 @@ const electronApi = {
     ipcRenderer.send('deleteStore', key)) as StoreMethods['delete'],
   clearStore: (() => ipcRenderer.send('clearStore')) as StoreMethods['clear'],
   quit: () => ipcRenderer.send('quit'),
-  playSoopChat: (streamerId: string): Promise<boolean> =>
-    ipcRenderer.invoke('playSoopChat', streamerId),
-  stopSoopChat: () => ipcRenderer.send('stopSoopChat'),
-  onDonationResponse: (callback: (response: DonationResponse) => void) => {
-    const listener = (_event: IpcRendererEvent, value: DonationResponse) =>
-      callback(value);
+  playSoopChat: (key: string, streamerId: string): Promise<boolean> =>
+    ipcRenderer.invoke('playSoopChat', key, streamerId),
+  stopSoopChat: (key: string) => ipcRenderer.send('stopSoopChat', key),
+  onDonationResponse: (
+    callback: (key: string, response: DonationResponse) => void,
+  ) => {
+    const listener = (
+      _event: IpcRendererEvent,
+      key2: string,
+      value: DonationResponse,
+    ) => callback(key2, value);
     ipcRenderer.on('donationResponse', listener);
     return () => {
       ipcRenderer.off('donationResponse', listener);
     };
   },
-  onChatResponse: (callback: (response: ChatResponse) => void) => {
-    const listener = (_event: IpcRendererEvent, value: ChatResponse) =>
-      callback(value);
+  onChatResponse: (callback: (key: string, response: ChatResponse) => void) => {
+    const listener = (
+      _event: IpcRendererEvent,
+      key2: string,
+      value: ChatResponse,
+    ) => callback(key2, value);
     ipcRenderer.on('chatResponse', listener);
     return () => {
       ipcRenderer.off('chatResponse', listener);
     };
   },
   // test
-  testDonation: (amount: number, comment: string) => {
-    ipcRenderer.send('testDonation', amount, comment);
+  testDonation: (windowType: string, amount: number, comment: string) => {
+    ipcRenderer.send('testDonation', windowType, amount, comment);
   },
 };
 

@@ -105,8 +105,8 @@ ipcMain.on('quit', () => app.quit());
 ipcMain.handle('playSoopChat', handlePlaySoopChat);
 ipcMain.on('stopSoopChat', handleStopSoopChat);
 // test
-ipcMain.on('testDonation', (event, amount, comment) => {
-  event.sender.send('donationResponse', {
+ipcMain.on('testDonation', (event, windowType, amount, comment) => {
+  event.sender.send('donationResponse', 'main', {
     receivedTime: new Date().toISOString(),
     to: 'joyfui',
     from: 'joyfui',
@@ -115,7 +115,7 @@ ipcMain.on('testDonation', (event, amount, comment) => {
     fanClubOrdinal: '0',
   });
   setTimeout(() => {
-    event.sender.send('chatResponse', {
+    event.sender.send('chatResponse', 'main', {
       receivedTime: new Date().toISOString(),
       username: 'joyfuI',
       userId: 'joyfui',

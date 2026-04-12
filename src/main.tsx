@@ -26,4 +26,4 @@ if (rootElement && !rootElement.innerHTML) {
 
 // test
 window.test = (amount: number, comment: string) =>
-  window.electron.testDonation(amount, comment);
+  window.electron.testDonation(window.name, amount, comment);

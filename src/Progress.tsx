@@ -19,14 +19,14 @@ const Progress = () => {
   const playSoopChat = async () => {
     const streamerId = await window.electron.getStoreAsync('setup.id');
     setIsPlay(true);
-    if (!(await window.electron.playSoopChat(streamerId))) {
+    if (!(await window.electron.playSoopChat('main', streamerId))) {
       alert('채팅 연결 실패!');
       setIsPlay(false);
     }
   };
 
   const stopSoopChat = () => {
-    window.electron.stopSoopChat();
+    window.electron.stopSoopChat('main');
     setIsPlay(false);
   };
 

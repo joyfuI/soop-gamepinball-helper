@@ -24,8 +24,11 @@ const App = () => {
   // 도네이션 응답을 받으면 일반 텍스트 응답을 기다렸다가 합친다.
   useEffect(
     () =>
-      window.electron.onDonationResponse((response) => {
-        console.log('donation', response);
+      window.electron.onDonationResponse((key, response) => {
+        if (key !== 'main') {
+          return;
+        }
+        console.log('donation', key, response);
         const username = response.fromUsername;
         if (!pendingDonation.current.has(username)) {
           pendingDonation.current.set(username, []);
@@ -43,8 +46,11 @@ const App = () => {
   );
   useEffect(
     () =>
-      window.electron.onChatResponse((response) => {
-        console.log('chat', response);
+      window.electron.onChatResponse((key, response) => {
+        if (key !== 'main') {
+          return;
+        }
+        console.log('chat', key, response);
         const username = response.username;
         const queue = pendingDonation.current.get(username) ?? [];
         if (queue.length > 0) {
