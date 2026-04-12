@@ -18,6 +18,14 @@ process.env.VITE_PUBLIC = process.env.VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST;
 
+const isInternalWindowOpen = (url: string) => {
+  const target = new URL(url);
+  if (process.env.VITE_DEV_SERVER_URL) {
+    return target.origin === new URL(process.env.VITE_DEV_SERVER_URL).origin;
+  }
+  return target.protocol === 'file:';
+};
+
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 1200,
@@ -34,6 +42,16 @@ const createWindow = () => {
   }
 
   win.webContents.setWindowOpenHandler(({ url }) => {
+    console.log('open', url);
+    if (isInternalWindowOpen(url)) {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          webPreferences: { preload: path.join(__dirname, 'preload.mjs') },
+          icon: path.join(process.env.VITE_PUBLIC, 'icon.png'),
+        },
+      };
+    }
     shell.openExternal(url);
     return { action: 'deny' };
   });

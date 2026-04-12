@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 
 import FormLabel from './components/FormLabel';
 import useStore from './hooks/useStore';
+import objectToFeatures from './utils/objectToFeatures';
 
 const Pinball = () => {
   const [review] = useStore('review');
@@ -60,6 +61,45 @@ const Pinball = () => {
           title="YouTube video player"
           width="560"
         ></iframe>
+      </FormLabel>
+
+      <FormLabel label="리롤 단가">
+        <Stack direction="row" spacing={1}>
+          <TextField
+            defaultValue={window.electron.getStore('pinball.rerollPrice')}
+            onChange={(e) =>
+              window.electron.setStore(
+                'pinball.rerollPrice',
+                parseInt(e.target.value, 10) || 0,
+              )
+            }
+            slotProps={{
+              htmlInput: { min: 0, step: 100, inputMode: 'numeric' },
+            }}
+            type="number"
+            variant="standard"
+          />
+          <Button
+            endIcon={<OpenInNewIcon />}
+            onClick={() =>
+              window.open(
+                '?window=reroll-timer',
+                'reroll-timer',
+                objectToFeatures({
+                  width: 320,
+                  height: 170,
+                  autoHideMenuBar: true,
+                  maximizable: false,
+                  alwaysOnTop: true,
+                  backgroundThrottling: false,
+                }),
+              )
+            }
+            variant="outlined"
+          >
+            리롤 타이머 열기
+          </Button>
+        </Stack>
       </FormLabel>
     </Stack>
   );

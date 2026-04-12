@@ -27,6 +27,12 @@ const zodSchema = z.object({
   review: z
     .record(z.string(), z.record(z.string().trim(), z.number()))
     .default({}),
+  pinball: z
+    .object({
+      rerollPrice: z.number(),
+      timer: z.object({ minute: z.number(), second: z.number() }),
+    })
+    .default({ rerollPrice: 1000, timer: { minute: 2, second: 0 } }),
 });
 
 const jsonSchema = z.toJSONSchema(zodSchema);
