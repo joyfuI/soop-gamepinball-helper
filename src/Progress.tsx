@@ -83,7 +83,7 @@ const Progress = () => {
 
       <Typography gutterBottom>인식한 별풍선 목록</Typography>
       <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
-        {donationList.map((donation) => (
+        {donationList.toReversed().map((donation) => (
           <Chip
             key={donation.receivedTime}
             label={donation.message}
