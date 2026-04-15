@@ -33,7 +33,6 @@ const Pinball = () => {
       <TextField
         fullWidth
         multiline
-        onChange={(e) => window.electron.setStore('setup.id', e.target.value)}
         slotProps={{ input: { readOnly: true } }}
         value={value}
         variant="outlined"

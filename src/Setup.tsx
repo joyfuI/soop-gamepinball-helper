@@ -7,6 +7,7 @@ import PriceList from './components/PriceList';
 import useStore from './hooks/useStore';
 
 const Setup = () => {
+  const [, setId] = useStore('setup.id');
   const [, setRule] = useStore('setup.rule');
   const [priceList, setPriceList] = useStore('setup.priceList');
 
@@ -32,7 +33,7 @@ const Setup = () => {
       >
         <TextField
           defaultValue={window.electron.getStore('setup.id')}
-          onChange={(e) => window.electron.setStore('setup.id', e.target.value)}
+          onChange={(e) => setId(e.target.value)}
           variant="outlined"
         />
       </FormLabel>

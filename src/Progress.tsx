@@ -5,6 +5,7 @@ import Divider from '@mui/material/Divider';
 import Fab from '@mui/material/Fab';
 import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 
@@ -15,6 +16,7 @@ const Progress = () => {
   const [fontSize, setFontSize] = useStore('progress.fontSize');
   const [donationList] = useStore('progress.donationList');
   const [rule] = useStore('setup.rule');
+  const theme = useTheme();
 
   const playSoopChat = async () => {
     const streamerId = await window.electron.getStoreAsync('setup.id');
@@ -68,7 +70,12 @@ const Progress = () => {
       </Stack>
 
       <Typography
-        sx={{ fontSize, '& code': { backgroundColor: 'lightyellow' } }}
+        sx={{
+          fontSize,
+          '& code': {
+            backgroundColor: theme.alpha(theme.palette.primary.main, 0.2),
+          },
+        }}
       >
         단가에 맞춰서 <code>게임이름</code>으로 별풍선 쏘면 자동으로 추가됩니다.
         <br />
