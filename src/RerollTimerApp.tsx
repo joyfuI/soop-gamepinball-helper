@@ -2,13 +2,13 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import usePalette from './hooks/usePalette';
 import useStore from './hooks/useStore';
-import { paletteMap } from './theme';
 
 const RerollTimerApp = () => {
   const [step, setStep] = useState(0); // 0: 타이머 설정, 1: 타이머 시작, 2: 타이머 정지
@@ -21,10 +21,8 @@ const RerollTimerApp = () => {
   const [isReroll, setIsReroll] = useState(false);
   const timer = useRef<NodeJS.Timeout>(null);
   const [rerollPrice] = useStore('pinball.rerollPrice');
-  const [id] = useStore('setup.id');
 
-  const palette = useMemo(() => paletteMap[id], [id]);
-  const theme = useMemo(() => createTheme({ palette }), [palette]);
+  const theme = usePalette();
 
   const interval = useCallback(() => {
     setSS((prevSS) => {
@@ -38,13 +36,15 @@ const RerollTimerApp = () => {
 
   const handleClick = useCallback(() => {
     switch (step) {
-      case 0: {
+      case 0:
         // 타이머 설정
-        window.electron.playSoopChat('reroll-timer', id);
+        window.electron.playSoopChat(
+          'reroll-timer',
+          window.electron.getStore('setup.id'),
+        );
         timer.current = setInterval(interval, 1000);
         setStep(1);
         break;
-      }
 
       case 1: // 타이머 시작
         window.electron.stopSoopChat('reroll-timer');
@@ -60,7 +60,7 @@ const RerollTimerApp = () => {
         setStep(0);
         break;
     }
-  }, [step, id, interval]);
+  }, [step, interval]);
 
   useEffect(() => {
     if (step === 1 && mm === 0 && ss === 0) {

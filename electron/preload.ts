@@ -1,3 +1,4 @@
+import type { PaletteOptions } from '@mui/material/styles';
 import type { IpcRendererEvent } from 'electron';
 import { contextBridge, ipcRenderer } from 'electron';
 import type Store from 'electron-store';
@@ -9,6 +10,8 @@ import type { StoreType } from './store';
 type StoreMethods = Store<StoreType>;
 
 const electronApi = {
+  getPalette: (path: string): Promise<Record<string, PaletteOptions>> =>
+    ipcRenderer.invoke('getPalette', path),
   getStore: ((key: string, defaultValue?: unknown) =>
     ipcRenderer.sendSync('getStore', key, defaultValue)) as StoreMethods['get'],
   getStoreAsync: <K extends DotPath<StoreType>>(

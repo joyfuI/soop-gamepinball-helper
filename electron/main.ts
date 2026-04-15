@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import Store from 'electron-store';
 
+import getPalette from './getPalette';
 import { handlePlaySoopChat, handleStopSoopChat } from './soop';
 import type { StoreType } from './store';
 import { schema } from './store';
@@ -103,6 +104,7 @@ app.on('browser-window-created', (_event, win) => {
 
 app.whenReady().then(createWindow);
 
+ipcMain.handle('getPalette', getPalette);
 ipcMain.on('getStore', (event, key, defaultValue) => {
   event.returnValue = store.get(key, defaultValue);
 });

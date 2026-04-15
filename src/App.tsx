@@ -1,18 +1,18 @@
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { useSnackbar } from 'notistack';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { DonationResponse } from 'soop-extension';
 
 import LinkDial from './components/LinkDial';
 import Navigation from './components/Navigation';
 import donationCalc from './helper/donationCalc';
+import usePalette from './hooks/usePalette';
 import useStore from './hooks/useStore';
 import Pinball from './Pinball';
 import Progress from './Progress';
 import Review from './Review';
 import Setup from './Setup';
-import { paletteMap } from './theme';
 
 const App = () => {
   const pendingDonation = useRef(
@@ -20,11 +20,9 @@ const App = () => {
   );
   const [tab, setTab] = useStore('tab');
   const [, setReview] = useStore('review');
-  const [id] = useStore('setup.id');
   const { enqueueSnackbar } = useSnackbar();
 
-  const palette = useMemo(() => paletteMap[id], [id]);
-  const theme = useMemo(() => createTheme({ palette }), [palette]);
+  const theme = usePalette();
 
   // 도네이션 응답과 도네이션 전자녀(일반 텍스트) 응답이 따로 오기 때문에
   // 도네이션 응답을 받으면 일반 텍스트 응답을 기다렸다가 합친다.
