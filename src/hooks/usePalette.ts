@@ -11,15 +11,20 @@ const usePalette = () => {
   const [id] = useStore('setup.id');
 
   useEffect(() => {
-    window.electron
-      .getPalette('/src/shared/palette.json')
-      .then((data) => setPaletteMap(data));
+    let ignore = false;
+    window.electron.getPalette('/src/shared/palette.json').then((data) => {
+      if (!ignore) {
+        setPaletteMap(data);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   const palette = useMemo(() => paletteMap[id], [paletteMap, id]);
-  const theme = useMemo(() => createTheme({ palette }), [palette]);
 
-  return theme;
+  return useMemo(() => createTheme({ palette }), [palette]);
 };
 
 export default usePalette;
