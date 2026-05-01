@@ -25,19 +25,19 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.11",
-    "@rolldown/plugin-babel": "^0.2.2",
+    "@biomejs/biome": "^2.4.13",
+    "@rolldown/plugin-babel": "^0.2.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
     "babel-plugin-react-compiler": "^1.0.0",
-    "electron": "^41.2.0",
+    "electron": "^41.3.0",
     "electron-builder": "^26.8.1",
-    "typescript": "^6.0.2",
-    "vite": "^8.0.8",
-    "vite-plugin-electron": "^1.0.0-beta.2",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
+    "vite-plugin-electron": "1.0.0-beta.6",
     "vite-plugin-electron-renderer": "^0.14.5"
   },
   "main": "dist-electron/main.js",
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
+  "packageManager": "pnpm@10.33.2+sha512.a90faf6feeab71ad6c6e57f94e0fe1a12f5dcc22cd754db40ae9593eb6a3e0b6b12e3540218bb37ae083404b1f2ce6db2a4121e979829b4aff94b99f49da1cf8"
 }
