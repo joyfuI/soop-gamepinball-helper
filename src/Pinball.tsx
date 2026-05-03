@@ -56,7 +56,7 @@ const Pinball = () => {
           allowFullScreen
           height="315"
           referrerPolicy="strict-origin-when-cross-origin"
-          src="https://www.youtube-nocookie.com/embed/tbMIHckT5No?si=S_9ykQsUl_K-sVHT"
+          src="https://www.youtube-nocookie.com/embed/tbMIHckT5No?playlist=tbMIHckT5No&loop=1"
           title="YouTube video player"
           width="560"
         ></iframe>
