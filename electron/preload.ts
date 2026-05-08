@@ -34,6 +34,7 @@ const electronApi = {
   playSoopChat: (key: string, streamerId: string): Promise<boolean> =>
     ipcRenderer.invoke('playSoopChat', key, streamerId),
   stopSoopChat: (key: string) => ipcRenderer.send('stopSoopChat', key),
+  isPlay: (key: string): Promise<boolean> => ipcRenderer.invoke('isPlay', key),
   onDonationResponse: (
     callback: (key: string, response: DonationResponse) => void,
   ) => {

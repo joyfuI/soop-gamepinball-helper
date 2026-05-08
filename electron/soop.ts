@@ -64,3 +64,8 @@ export const handleStopSoopChat = (_event: IpcMainEvent, key: string) => {
   soopChatMap.delete(key);
   soopChat?.disconnect();
 };
+
+export const handleIsPlay = (_event: IpcMainInvokeEvent, key: string) => {
+  console.log('call isPlay', key);
+  return soopChatMap.has(key);
+};

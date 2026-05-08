@@ -4,7 +4,7 @@ import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import Store from 'electron-store';
 
 import getPalette from './getPalette';
-import { handlePlaySoopChat, handleStopSoopChat } from './soop';
+import { handleIsPlay, handlePlaySoopChat, handleStopSoopChat } from './soop';
 import type { StoreType } from './store';
 import { schema } from './store';
 
@@ -120,6 +120,7 @@ ipcMain.on('clearStore', () => store.clear());
 ipcMain.on('quit', () => app.quit());
 ipcMain.handle('playSoopChat', handlePlaySoopChat);
 ipcMain.on('stopSoopChat', handleStopSoopChat);
+ipcMain.handle('isPlay', handleIsPlay);
 // test
 ipcMain.on('testDonation', (event, windowType, amount, comment) => {
   if (windowType === 'reroll-timer') {

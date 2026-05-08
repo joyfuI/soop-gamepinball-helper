@@ -7,7 +7,7 @@ import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useStore from './hooks/useStore';
 
@@ -17,6 +17,13 @@ const Progress = () => {
   const [donationList] = useStore('progress.donationList');
   const [rule] = useStore('setup.rule');
   const theme = useTheme();
+
+  useEffect(() => {
+    (async () => {
+      const result = await window.electron.isPlay('main');
+      setIsPlay(result);
+    })();
+  }, []);
 
   const playSoopChat = async () => {
     const streamerId = await window.electron.getStoreAsync('setup.id');

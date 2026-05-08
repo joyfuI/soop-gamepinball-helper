@@ -68,6 +68,7 @@ const Setup = () => {
           <Button
             color="warning"
             onClick={async () => {
+              window.electron.stopSoopChat('main');
               const fontSize =
                 await window.electron.getStoreAsync('progress.fontSize');
               window.electron.deleteStore('progress');
@@ -82,6 +83,7 @@ const Setup = () => {
           <Button
             color="error"
             onClick={() => {
+              window.electron.stopSoopChat('main');
               window.electron.clearStore();
               window.location.reload();
             }}
