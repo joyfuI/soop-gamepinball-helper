@@ -40,7 +40,7 @@ const Pinball = () => {
 
       <Button
         endIcon={<OpenInNewIcon />}
-        href={`https://lazygyu.github.io/roulette/?names=${value}`}
+        href={`https://lazygyu.github.io/roulette/?names=${encodeURIComponent(value)}`}
         rel="noreferrer"
         size="large"
         sx={{ alignSelf: 'self-start' }}

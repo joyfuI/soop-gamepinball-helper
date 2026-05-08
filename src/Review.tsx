@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 
 import PinballList from './components/PinballList';
 import donationCalc from './helper/donationCalc';
+import sanitizeText from './helper/sanitizeText';
 import useStore from './hooks/useStore';
 import type { StoreType } from './types';
 
@@ -13,13 +14,13 @@ const Review = () => {
   const [priceList] = useStore('setup.priceList');
 
   const handleAdd = (key: string, value: string) => {
-    const trimValue = value.trim();
-    if (trimValue) {
+    const sanitizeValue = sanitizeText(value);
+    if (sanitizeValue) {
       setReview((oldReview) => ({
         ...oldReview,
         [key]: {
           ...oldReview[key],
-          [value]: (oldReview[key]?.[value] ?? 0) + 1,
+          [sanitizeValue]: (oldReview[key]?.[sanitizeValue] ?? 0) + 1,
         },
       }));
     }
@@ -58,9 +59,10 @@ const Review = () => {
     const newReview = donationList.reduce<StoreType['review']>((prev, curr) => {
       const calcResult = donationCalc(curr); // 단가 계산
       if (calcResult) {
+        const name = sanitizeText(calcResult.name);
         prev[calcResult.price] ??= {};
-        prev[calcResult.price][calcResult.name] ??= 0;
-        prev[calcResult.price][calcResult.name] += calcResult.amount;
+        prev[calcResult.price][name] ??= 0;
+        prev[calcResult.price][name] += calcResult.amount;
       }
       return prev;
     }, {});

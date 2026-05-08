@@ -7,6 +7,7 @@ import type { DonationResponse } from 'soop-extension';
 import LinkDial from './components/LinkDial';
 import Navigation from './components/Navigation';
 import donationCalc from './helper/donationCalc';
+import sanitizeText from './helper/sanitizeText';
 import usePalette from './hooks/usePalette';
 import useStore from './hooks/useStore';
 import Pinball from './Pinball';
@@ -76,18 +77,17 @@ const App = () => {
                   detail: { key: 'progress.donationList' },
                 }),
               );
+              const name = sanitizeText(calcResult.name);
               setReview((oldReview) => ({
                 ...oldReview,
                 [calcResult.price]: {
                   ...oldReview[calcResult.price],
-                  [calcResult.name]:
-                    (oldReview[calcResult.price]?.[calcResult.name] ?? 0) +
+                  [name]:
+                    (oldReview[calcResult.price]?.[name] ?? 0) +
                     calcResult.amount,
                 },
               }));
-              enqueueSnackbar(
-                `${calcResult.name} ${calcResult.amount}개 추가됨`,
-              );
+              enqueueSnackbar(`${name} ${calcResult.amount}개 추가됨`);
             }
           }
           if (queue.length === 0) {
