@@ -1,3 +1,3 @@
-const sanitizeText = (input: string) => input.replace(/[,*]/g, '').trim();
+const sanitizeText = (input: string) => input.replace(/[,*/]/g, '').trim();
 
 export default sanitizeText;
