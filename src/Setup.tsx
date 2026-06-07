@@ -64,7 +64,7 @@ const Setup = () => {
         description="모든 설정은 실시간으로 저장됩니다. 처음부터 하고 싶으면 초기화 버튼을 누르세요."
         label="초기화"
       >
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-end' }}>
           <Button
             color="warning"
             onClick={async () => {
@@ -76,9 +76,10 @@ const Setup = () => {
               window.electron.deleteStore('review');
               window.location.reload();
             }}
+            size="large"
             variant="contained"
           >
-            별풍선만 초기화
+            별풍선(핀볼)만 초기화
           </Button>
           <Button
             color="error"
@@ -87,6 +88,7 @@ const Setup = () => {
               window.electron.clearStore();
               window.location.reload();
             }}
+            size="small"
             variant="contained"
           >
             전체 초기화
