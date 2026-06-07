@@ -32,7 +32,7 @@ const zodSchema = z.object({
       rerollPrice: z.number(),
       timer: z.object({ minute: z.number(), second: z.number() }),
     })
-    .default({ rerollPrice: 1000, timer: { minute: 2, second: 0 } }),
+    .default({ rerollPrice: 1000, timer: { minute: 1, second: 0 } }),
 });
 
 const jsonSchema = z.toJSONSchema(zodSchema);
