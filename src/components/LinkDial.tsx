@@ -6,7 +6,6 @@ import SpeedDialAction from '@mui/material/SpeedDialAction';
 import BattleNetIcon from './icons/BattleNetIcon';
 import EAIcon from './icons/EAIcon';
 import EpicGamesIcon from './icons/EpicGamesIcon';
-import GOGComIcon from './icons/GOGComIcon';
 import SteamIcon from './icons/SteamIcon';
 import UbisoftIcon from './icons/UbisoftIcon';
 
@@ -22,6 +21,11 @@ const actions = [
     url: 'https://store.steampowered.com/',
   },
   {
+    icon: <BattleNetIcon />,
+    name: 'Battle.net',
+    url: 'https://kr.shop.battle.net/ko-kr',
+  },
+  {
     icon: <EpicGamesIcon />,
     name: 'Epic Games',
     url: 'https://store.epicgames.com/ko/',
@@ -32,12 +36,6 @@ const actions = [
     name: 'Ubisoft',
     url: 'https://www.ubisoft.com/ko-kr/games',
   },
-  {
-    icon: <BattleNetIcon />,
-    name: 'Battle.net',
-    url: 'https://kr.shop.battle.net/ko-kr',
-  },
-  { icon: <GOGComIcon />, name: 'GOG.com', url: 'https://www.gog.com/en/' },
 ] as const;
 
 const LinkDial = () => {
