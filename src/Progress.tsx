@@ -39,6 +39,10 @@ const Progress = () => {
     setIsPlay(false);
   };
 
+  const handleFontSizeChange = (_e: Event, v: number) => {
+    setFontSize(v);
+  };
+
   return (
     <>
       <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
@@ -48,7 +52,7 @@ const Progress = () => {
         <Slider
           max={120}
           min={20}
-          onChange={(_e, newValue) => setFontSize(newValue)}
+          onChange={handleFontSizeChange}
           size="small"
           value={fontSize}
           valueLabelDisplay="auto"

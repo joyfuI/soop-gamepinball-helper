@@ -11,6 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
+import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 
 import type { StoreType } from '../types';
@@ -46,39 +47,61 @@ const PinballList = ({
 }: PinballListProps) => {
   const [value, setValue] = useState('');
 
+  const handleAdd = () => {
+    onAdd(price, value);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
   return (
     <Paper sx={{ minWidth: 340 }}>
       <List
         disablePadding
         subheader={<ListSubheader>{`단가 ${price}개`}</ListSubheader>}
       >
-        {Object.entries(data).map(([name, amount]) => (
-          <ListItem key={name}>
-            <ListItemText primary={`${name}*${amount}`} />
-            <ButtonGroup size="small">
-              <Button onClick={() => onPlus(price, name)}>
-                <AddIcon />
-              </Button>
-              <Button onClick={() => onMinus(price, name)}>
-                <RemoveIcon />
-              </Button>
-              <Button onClick={() => onDelete(price, name)}>
-                <DeleteIcon />
-              </Button>
-            </ButtonGroup>
-          </ListItem>
-        ))}
+        {Object.entries(data).map(([name, amount]) => {
+          const handlePlus = () => {
+            onPlus(price, name);
+          };
+
+          const handleMinus = () => {
+            onMinus(price, name);
+          };
+
+          const handleDelete = () => {
+            onDelete(price, name);
+          };
+
+          return (
+            <ListItem key={name}>
+              <ListItemText primary={`${name}*${amount}`} />
+              <ButtonGroup size="small">
+                <Button onClick={handlePlus}>
+                  <AddIcon />
+                </Button>
+                <Button onClick={handleMinus}>
+                  <RemoveIcon />
+                </Button>
+                <Button onClick={handleDelete}>
+                  <DeleteIcon />
+                </Button>
+              </ButtonGroup>
+            </ListItem>
+          );
+        })}
         <Divider />
         <ListItem
           secondaryAction={
-            <IconButton edge="end" onClick={() => onAdd(price, value)}>
+            <IconButton edge="end" onClick={handleAdd}>
               <AddIcon />
             </IconButton>
           }
         >
           <TextField
             fullWidth
-            onChange={(e) => setValue(e.target.value)}
+            onChange={handleChange}
             value={value}
             variant="standard"
           />

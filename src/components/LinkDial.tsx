@@ -45,14 +45,20 @@ const LinkDial = () => {
       icon={<OpenInNewIcon />}
       sx={{ position: 'fixed', bottom: 76, right: 16 }}
     >
-      {actions.map((action) => (
-        <SpeedDialAction
-          icon={action.icon}
-          key={action.name}
-          onClick={() => window.open(action.url)}
-          slotProps={{ tooltip: { title: action.name } }}
-        />
-      ))}
+      {actions.map((action) => {
+        const handleClick = () => {
+          window.open(action.url);
+        };
+
+        return (
+          <SpeedDialAction
+            icon={action.icon}
+            key={action.name}
+            onClick={handleClick}
+            slotProps={{ tooltip: { title: action.name } }}
+          />
+        );
+      })}
     </SpeedDial>
   );
 };

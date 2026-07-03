@@ -2,6 +2,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import type { ChangeEvent } from 'react';
 import { useMemo } from 'react';
 
 import FormLabel from './components/FormLabel';
@@ -27,6 +28,28 @@ const Pinball = () => {
         .join(','),
     [review, priceList],
   );
+
+  const handleRerollPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    window.electron.setStore(
+      'pinball.rerollPrice',
+      parseInt(e.target.value, 10) || 0,
+    );
+  };
+
+  const handleOpenClick = () => {
+    window.open(
+      '?window=reroll-timer',
+      'reroll-timer',
+      objectToFeatures({
+        width: 320,
+        height: 170,
+        autoHideMenuBar: true,
+        maximizable: false,
+        alwaysOnTop: true,
+        backgroundThrottling: false,
+      }),
+    );
+  };
 
   return (
     <Stack spacing={2}>
@@ -66,12 +89,7 @@ const Pinball = () => {
         <Stack direction="row" spacing={1}>
           <TextField
             defaultValue={window.electron.getStore('pinball.rerollPrice')}
-            onChange={(e) =>
-              window.electron.setStore(
-                'pinball.rerollPrice',
-                parseInt(e.target.value, 10) || 0,
-              )
-            }
+            onChange={handleRerollPriceChange}
             slotProps={{
               htmlInput: { min: 0, step: 100, inputMode: 'numeric' },
             }}
@@ -80,20 +98,7 @@ const Pinball = () => {
           />
           <Button
             endIcon={<OpenInNewIcon />}
-            onClick={() =>
-              window.open(
-                '?window=reroll-timer',
-                'reroll-timer',
-                objectToFeatures({
-                  width: 320,
-                  height: 170,
-                  autoHideMenuBar: true,
-                  maximizable: false,
-                  alwaysOnTop: true,
-                  backgroundThrottling: false,
-                }),
-              )
-            }
+            onClick={handleOpenClick}
             variant="outlined"
           >
             리롤 타이머 열기

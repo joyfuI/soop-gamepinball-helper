@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import { ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import usePalette from './hooks/usePalette';
@@ -83,6 +84,22 @@ const RerollTimerApp = () => {
     [step, rerollPrice, handleClick],
   );
 
+  const handleMinuteChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10) || 0;
+    window.electron.setStore('pinball.timer.minute', value);
+    setMM(value);
+  };
+
+  const handleSecondChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10) || 0;
+    window.electron.setStore('pinball.timer.second', value);
+    setSS(value);
+  };
+
+  const handleBackdropClick = () => {
+    setIsReroll(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -101,11 +118,7 @@ const RerollTimerApp = () => {
           <TextField
             disabled={step !== 0}
             fullWidth
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10) || 0;
-              window.electron.setStore('pinball.timer.minute', value);
-              setMM(value);
-            }}
+            onChange={handleMinuteChange}
             slotProps={{
               htmlInput: { min: 0, max: 59, step: 1, inputMode: 'numeric' },
             }}
@@ -118,11 +131,7 @@ const RerollTimerApp = () => {
           <TextField
             disabled={step !== 0}
             fullWidth
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10) || 0;
-              window.electron.setStore('pinball.timer.second', value);
-              setSS(value);
-            }}
+            onChange={handleSecondChange}
             slotProps={{
               htmlInput: { min: 0, max: 59, step: 1, inputMode: 'numeric' },
             }}
@@ -141,7 +150,7 @@ const RerollTimerApp = () => {
         </Stack>
 
         <Backdrop
-          onClick={() => setIsReroll(false)}
+          onClick={handleBackdropClick}
           open={isReroll}
           sx={{ backgroundColor: 'rgba(0, 0, 0, 0.9)', cursor: 'pointer' }}
         >

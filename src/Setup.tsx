@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import type { ChangeEvent } from 'react';
 
 import FormLabel from './components/FormLabel';
 import PriceList from './components/PriceList';
@@ -25,6 +26,29 @@ const Setup = () => {
     setPriceList((oldValue) => oldValue.filter((item) => item !== value));
   };
 
+  const handleIdChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setId(e.target.value);
+  };
+
+  const handleRuleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setRule(e.target.value);
+  };
+
+  const handlePinballResetClick = async () => {
+    window.electron.stopSoopChat('main');
+    const fontSize = await window.electron.getStoreAsync('progress.fontSize');
+    window.electron.deleteStore('progress');
+    window.electron.setStore('progress.fontSize', fontSize);
+    window.electron.deleteStore('review');
+    window.location.reload();
+  };
+
+  const handleAllResetClick = async () => {
+    window.electron.stopSoopChat('main');
+    window.electron.clearStore();
+    window.location.reload();
+  };
+
   return (
     <Stack spacing={2}>
       <FormLabel
@@ -33,7 +57,7 @@ const Setup = () => {
       >
         <TextField
           defaultValue={window.electron.getStore('setup.id')}
-          onChange={(e) => setId(e.target.value)}
+          onChange={handleIdChange}
           variant="outlined"
         />
       </FormLabel>
@@ -48,7 +72,7 @@ const Setup = () => {
           maxRows={10}
           minRows={4}
           multiline
-          onChange={(e) => setRule(e.target.value)}
+          onChange={handleRuleChange}
           variant="outlined"
         />
       </FormLabel>
@@ -67,15 +91,7 @@ const Setup = () => {
         <Stack direction="row" spacing={1} sx={{ alignItems: 'flex-end' }}>
           <Button
             color="warning"
-            onClick={async () => {
-              window.electron.stopSoopChat('main');
-              const fontSize =
-                await window.electron.getStoreAsync('progress.fontSize');
-              window.electron.deleteStore('progress');
-              window.electron.setStore('progress.fontSize', fontSize);
-              window.electron.deleteStore('review');
-              window.location.reload();
-            }}
+            onClick={handlePinballResetClick}
             size="large"
             variant="contained"
           >
@@ -83,11 +99,7 @@ const Setup = () => {
           </Button>
           <Button
             color="error"
-            onClick={() => {
-              window.electron.stopSoopChat('main');
-              window.electron.clearStore();
-              window.location.reload();
-            }}
+            onClick={handleAllResetClick}
             size="small"
             variant="contained"
           >

@@ -1,6 +1,7 @@
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { useSnackbar } from 'notistack';
+import type { SyntheticEvent } from 'react';
 import { useEffect, useRef } from 'react';
 import type { DonationResponse } from 'soop-extension';
 
@@ -98,10 +99,14 @@ const App = () => {
     [setReview, enqueueSnackbar],
   );
 
+  const handleChange = (_e: SyntheticEvent, v: number) => {
+    setTab(v);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" sx={{ p: 2 }}>
-        <Navigation onChange={(_e, newValue) => setTab(newValue)} value={tab}>
+        <Navigation onChange={handleChange} value={tab}>
           <Setup />
           <Progress />
           <Review />
